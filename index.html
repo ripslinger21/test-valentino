@@ -7,7 +7,7 @@
     <style>
         body { 
             margin: 0; 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            font-family: 'Arial', sans-serif; 
             display: flex; 
             flex-direction: column; 
             align-items: center; 
@@ -16,31 +16,46 @@
             background-color: #fce4ec; 
             text-align: center; 
             padding: 20px;
+            overflow-x: hidden; /* Evita scroll orizzontale se il tasto diventa enorme */
         }
-        h1 { color: #d81b60; line-height: 1.4; }
-        .buttons { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+        .container { max-width: 600px; z-index: 1; }
+        h1 { color: #d81b60; margin-bottom: 20px; }
+        .buttons { 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 15px; 
+            margin-top: 20px;
+        }
         button { 
-            padding: 10px 20px; 
+            padding: 12px 24px; 
             border: none; 
-            border-radius: 50px; 
+            border-radius: 8px; 
             cursor: pointer; 
             font-weight: bold; 
-            transition: all 0.2s;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.1s ease;
         }
-        #yesBtn { background-color: #4CAF50; color: white; }
-        #noBtn { background-color: #f44336; color: white; font-size: 16px; }
-        img { max-width: 250px; border-radius: 20px; margin-bottom: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        #yesBtn { 
+            background-color: #4CAF50; 
+            color: white; 
+            font-size: 18px;
+            white-space: nowrap;
+        }
+        #noBtn { 
+            background-color: #f44336; 
+            color: white; 
+            font-size: 18px; 
+        }
+        img { max-width: 250px; border-radius: 15px; margin-bottom: 20px; }
         .yay-text { font-size: 40px; color: #ff4081; font-weight: bold; display: none; }
-        .container { max-width: 600px; }
     </style>
 </head>
 <body>
 
     <div id="game-container" class="container">
         <img id="mainImg" src="https://media.tenor.com/VIChDQ6ejRQAAAAj/jumping-bear-hearts-no-png.gif" alt="Bear">
-        <h1 id="question">Simone, vuoi fare un bambino con me? 👶🍼</h1>
-        <div class="buttons" id="btnContainer">
+        <h1>Simone, vuoi fare un bambino con me? 👶🍼</h1>
+        <div class="buttons">
             <button id="yesBtn">Sì! ❤️</button>
             <button id="noBtn">No</button>
         </div>
@@ -48,7 +63,8 @@
 
     <div id="yayMessage" class="yay-text">
         <img src="https://media.tenor.com/f1xnRxTRxLAAAAAj/bears-with-kisses-bg.gif" alt="Bears Kissing"><br>
-        ODDIO SÌ! Sarà bellissimo! 💖👨‍👩‍👧‍👦
+        ODDIO SÌ! 💖🎉<br>
+        Sarà bellissimo!
     </div>
 
     <script>
@@ -84,19 +100,17 @@
         noBtn.addEventListener('click', () => {
             noClicks++;
             
-            // Ingrandisci il tasto YES in modo esponenziale
-            const newSize = 16 + (noClicks * 18); // Cresce molto più velocemente
-            yesBtn.style.fontSize = newSize + 'px';
-            yesBtn.style.padding = (10 + noClicks * 8) + 'px ' + (20 + noClicks * 15) + 'px';
+            // Ingrandisci il tasto YES sensibilmente
+            const fontSize = 18 + (noClicks * 15); 
+            const paddingVertical = 12 + (noClicks * 8);
+            const paddingHorizontal = 24 + (noClicks * 12);
+            
+            yesBtn.style.fontSize = fontSize + 'px';
+            yesBtn.style.padding = `${paddingVertical}px ${paddingHorizontal}px`;
 
-            // Cambia testo al tasto NO pescando dalle 20 frasi
+            // Cambia testo al tasto NO
             const phraseIndex = Math.min(noClicks - 1, noPhrases.length - 1);
             noBtn.innerText = noPhrases[phraseIndex];
-            
-            // Sposta un po' il tasto no a caso per renderlo difficile da cliccare (opzionale)
-            if(noClicks > 5) {
-                noBtn.style.transform = `scale(${Math.max(0.5, 1 - noClicks * 0.05)})`;
-            }
         });
 
         yesBtn.addEventListener('click', () => {
