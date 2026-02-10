@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will You Be My Valentine? 💘</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh; /* Usa min-height per permettere al contenuto di crescere */
+            background-color: #fce4ec; /* Sfondo leggermente rosa per il tema */
+            color: #333;
+            text-align: center;
+            padding: 20px; /* Aggiungi un po' di padding */
+            box-sizing: border-box; /* Include padding e border nel width/height */
+        }
+        h1 {
+            color: #d81b60; /* Colore rosa più intenso per il titolo */
+            margin-bottom: 20px;
+        }
+        button {
+            margin: 10px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.1s ease-in-out, background-color 0.2s ease;
+        }
+        button:hover {
+            transform: translateY(-2px);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        .yes-button {
+            background-color: #4CAF50; /* Verde */
+            color: white;
+            font-size: 16px; /* Dimensione base */
+        }
+        .no-button {
+            background-color: #f44336; /* Rosso */
+            color: white;
+            font-size: 16px;
+        }
+        .yay-message {
+            font-size: 48px;
+            color: #ff4081;
+            font-weight: bold;
+            margin-top: 20px;
+            animation: bounceIn 0.8s ease-out;
+        }
+        img {
+            max-width: 100%; /* Rendi le immagini responsive */
+            height: auto;
+            margin-bottom: 20px;
+            border-radius: 10px; /* Bordi arrotondati per le immagini */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Ombra leggera */
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0.1); opacity: 0; }
+            60% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.8em;
+            }
+            .yay-message {
+                font-size: 2.5em;
+            }
+            button {
+                padding: 8px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "react": "https://esm.sh/react@18.2.0",
+                "react-dom/client": "https://esm.sh/react-dom@18.2.0/client"
+            }
+        }
+    </script>
+    <script type="module">
+        import React, { useState } from "react";
+        import { createRoot } from "react-dom/client";
+
+        const NO_PHRASES = [
+            "No 💔",
+            "Pretty please? 🥺",
+            "But we'd be so cute together! 💕",
+            "One more chance, pookie?",
+            "Don't break my heart :(",
+            "What about a maybe?",
+            "Please don't do this to me, I'm fragile",
+            "Just say yes already! 🙏",
+            "My heart can't take much more 😭",
+            "Is that your final answer? 😩",
+            "Are you really sure? 🤔",
+            "Don't you love me? 😥",
+            "This is getting serious now... 😢",
+            "Okay, one last try... please? 🥺👉👈"
+        ];
+
+        function App() {
+            const [noClicks, setNoClicks] = useState(0);
+            const [isValentine, setIsValentine] = useState(false);
+            // La dimensione aumenta di più rapidamente
+            const yesButtonSize = 16 + (noClicks * 10); // Aumenta di 10px ad ogni click del "No"
+
+            const firstImg = "https://media.tenor.com/VIChDQ6ejRQAAAAj/jumping-bear-hearts-no-png.gif";
+            const secondImg = "https://media.tenor.com/f1xnRxTRxLAAAAAj/bears-with-kisses-bg.gif";
+
+            const handleNo = () => {
+                setNoClicks(prev => prev + 1);
+            };
+
+            const handleYes = () => {
+                setIsValentine(true);
+            };
+
+            const currentNoPhrase = NO_PHRASES[Math.min(noClicks, NO_PHRASES.length - 1)];
+
+            return (
+                <>
+                    {!isValentine
+                        ? (
+                            <>
+                                <img src={firstImg} alt="Jumping bear with hearts" />
+                                <h1>Will you be my Valentine? 💘</h1>
+                                <div>
+                                    <button
+                                        onClick={handleYes}
+                                        className="yes-button"
+                                        style={{ fontSize: `${yesButtonSize}px` }}
+                                    >
+                                        Yes
+                                    </button>
+                                    <button
+                                        onClick={handleNo}
+                                        className="no-button"
+                                    >
+                                        {noClicks === 0 ? "No" : currentNoPhrase}
+                                    </button>
+                                </div>
+                            </>
+                        )
+                        : (
+                            <>
+                                <img src={secondImg} alt="Bears with kisses" />
+                                <div className="yay-message">
+                                    Yay!!! 💖🎉
+                                </div>
+                            </>
+                        )}
+                </>
+            );
+        }
+
+        const root = createRoot(document.getElementById("root"));
+        root.render(<App />);
+    </script>
+</body>
+</html>
