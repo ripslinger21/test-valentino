@@ -1,177 +1,108 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Will You Be My Valentine? 💘</title>
+    <title>Messaggio per Simone 👶</title>
     <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh; /* Usa min-height per permettere al contenuto di crescere */
-            background-color: #fce4ec; /* Sfondo leggermente rosa per il tema */
-            color: #333;
-            text-align: center;
-            padding: 20px; /* Aggiungi un po' di padding */
-            box-sizing: border-box; /* Include padding e border nel width/height */
+        body { 
+            margin: 0; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            min-height: 100vh; 
+            background-color: #fce4ec; 
+            text-align: center; 
+            padding: 20px;
         }
-        h1 {
-            color: #d81b60; /* Colore rosa più intenso per il titolo */
-            margin-bottom: 20px;
+        h1 { color: #d81b60; line-height: 1.4; }
+        .buttons { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+        button { 
+            padding: 10px 20px; 
+            border: none; 
+            border-radius: 50px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            transition: all 0.2s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
-        button {
-            margin: 10px;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: transform 0.1s ease-in-out, background-color 0.2s ease;
-        }
-        button:hover {
-            transform: translateY(-2px);
-        }
-        button:active {
-            transform: translateY(0);
-        }
-        .yes-button {
-            background-color: #4CAF50; /* Verde */
-            color: white;
-            font-size: 16px; /* Dimensione base */
-        }
-        .no-button {
-            background-color: #f44336; /* Rosso */
-            color: white;
-            font-size: 16px;
-        }
-        .yay-message {
-            font-size: 48px;
-            color: #ff4081;
-            font-weight: bold;
-            margin-top: 20px;
-            animation: bounceIn 0.8s ease-out;
-        }
-        img {
-            max-width: 100%; /* Rendi le immagini responsive */
-            height: auto;
-            margin-bottom: 20px;
-            border-radius: 10px; /* Bordi arrotondati per le immagini */
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Ombra leggera */
-        }
-
-        @keyframes bounceIn {
-            0% { transform: scale(0.1); opacity: 0; }
-            60% { transform: scale(1.2); opacity: 1; }
-            100% { transform: scale(1); }
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 600px) {
-            h1 {
-                font-size: 1.8em;
-            }
-            .yay-message {
-                font-size: 2.5em;
-            }
-            button {
-                padding: 8px 15px;
-            }
-        }
+        #yesBtn { background-color: #4CAF50; color: white; }
+        #noBtn { background-color: #f44336; color: white; font-size: 16px; }
+        img { max-width: 250px; border-radius: 20px; margin-bottom: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .yay-text { font-size: 40px; color: #ff4081; font-weight: bold; display: none; }
+        .container { max-width: 600px; }
     </style>
 </head>
 <body>
-    <div id="root"></div>
 
-    <script type="importmap">
-        {
-            "imports": {
-                "react": "https://esm.sh/react@18.2.0",
-                "react-dom/client": "https://esm.sh/react-dom@18.2.0/client"
-            }
-        }
-    </script>
-    <script type="module">
-        import React, { useState } from "react";
-        import { createRoot } from "react-dom/client";
+    <div id="game-container" class="container">
+        <img id="mainImg" src="https://media.tenor.com/VIChDQ6ejRQAAAAj/jumping-bear-hearts-no-png.gif" alt="Bear">
+        <h1 id="question">Simone, vuoi fare un bambino con me? 👶🍼</h1>
+        <div class="buttons" id="btnContainer">
+            <button id="yesBtn">Sì! ❤️</button>
+            <button id="noBtn">No</button>
+        </div>
+    </div>
 
-        const NO_PHRASES = [
+    <div id="yayMessage" class="yay-text">
+        <img src="https://media.tenor.com/f1xnRxTRxLAAAAAj/bears-with-kisses-bg.gif" alt="Bears Kissing"><br>
+        ODDIO SÌ! Sarà bellissimo! 💖👨‍👩‍👧‍👦
+    </div>
+
+    <script>
+        let noClicks = 0;
+        const noPhrases = [
             "No 💔",
-            "Pretty please? 🥺",
-            "But we'd be so cute together! 💕",
-            "One more chance, pookie?",
-            "Don't break my heart :(",
-            "What about a maybe?",
-            "Please don't do this to me, I'm fragile",
-            "Just say yes already! 🙏",
-            "My heart can't take much more 😭",
-            "Is that your final answer? 😩",
-            "Are you really sure? 🤔",
-            "Don't you love me? 😥",
-            "This is getting serious now... 😢",
-            "Okay, one last try... please? 🥺👉👈"
+            "Sicuro sicuro? 🥺",
+            "Ma sarebbe bellissimo! 💕",
+            "Ripensaci... 🍼",
+            "Guarda che sono seria! 😂",
+            "Un piccolo Simone in giro? No?",
+            "Daiiii pookie! ❤️",
+            "Ti prego ti prego ti prego!",
+            "E se ti preparo la carbonara? 🍝",
+            "Ma guarda quanto sono carini i neonati! 👶",
+            "Non spezzarmi il cuore così... 😭",
+            "Dì di sì, non fare il difficile!",
+            "Ti compro la PlayStation 6? 🎮",
+            "Ok, ora stai esagerando col No 😤",
+            "E se fosse un forse? 🤔",
+            "Ma io ti amo! ❤️",
+            "Pensa ai nonni come sarebbero felici! 👵",
+            "Ultima chance per dire sì subito...",
+            "Guarda che il tasto sì diventerà enorme!",
+            "Non hai scampo, premi Sì! 🥰"
         ];
 
-        function App() {
-            const [noClicks, setNoClicks] = useState(0);
-            const [isValentine, setIsValentine] = useState(false);
-            // La dimensione aumenta di più rapidamente
-            const yesButtonSize = 16 + (noClicks * 10); // Aumenta di 10px ad ogni click del "No"
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+        const gameContainer = document.getElementById('game-container');
+        const yayMessage = document.getElementById('yayMessage');
 
-            const firstImg = "https://media.tenor.com/VIChDQ6ejRQAAAAj/jumping-bear-hearts-no-png.gif";
-            const secondImg = "https://media.tenor.com/f1xnRxTRxLAAAAAj/bears-with-kisses-bg.gif";
+        noBtn.addEventListener('click', () => {
+            noClicks++;
+            
+            // Ingrandisci il tasto YES in modo esponenziale
+            const newSize = 16 + (noClicks * 18); // Cresce molto più velocemente
+            yesBtn.style.fontSize = newSize + 'px';
+            yesBtn.style.padding = (10 + noClicks * 8) + 'px ' + (20 + noClicks * 15) + 'px';
 
-            const handleNo = () => {
-                setNoClicks(prev => prev + 1);
-            };
+            // Cambia testo al tasto NO pescando dalle 20 frasi
+            const phraseIndex = Math.min(noClicks - 1, noPhrases.length - 1);
+            noBtn.innerText = noPhrases[phraseIndex];
+            
+            // Sposta un po' il tasto no a caso per renderlo difficile da cliccare (opzionale)
+            if(noClicks > 5) {
+                noBtn.style.transform = `scale(${Math.max(0.5, 1 - noClicks * 0.05)})`;
+            }
+        });
 
-            const handleYes = () => {
-                setIsValentine(true);
-            };
-
-            const currentNoPhrase = NO_PHRASES[Math.min(noClicks, NO_PHRASES.length - 1)];
-
-            return (
-                <>
-                    {!isValentine
-                        ? (
-                            <>
-                                <img src={firstImg} alt="Jumping bear with hearts" />
-                                <h1>Will you be my Valentine? 💘</h1>
-                                <div>
-                                    <button
-                                        onClick={handleYes}
-                                        className="yes-button"
-                                        style={{ fontSize: `${yesButtonSize}px` }}
-                                    >
-                                        Yes
-                                    </button>
-                                    <button
-                                        onClick={handleNo}
-                                        className="no-button"
-                                    >
-                                        {noClicks === 0 ? "No" : currentNoPhrase}
-                                    </button>
-                                </div>
-                            </>
-                        )
-                        : (
-                            <>
-                                <img src={secondImg} alt="Bears with kisses" />
-                                <div className="yay-message">
-                                    Yay!!! 💖🎉
-                                </div>
-                            </>
-                        )}
-                </>
-            );
-        }
-
-        const root = createRoot(document.getElementById("root"));
-        root.render(<App />);
+        yesBtn.addEventListener('click', () => {
+            gameContainer.style.display = 'none';
+            yayMessage.style.display = 'block';
+        });
     </script>
 </body>
 </html>
